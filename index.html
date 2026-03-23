@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BRM Coffee Survey — India</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --espresso: #1a0a00;
+    --dark-roast: #2d1200;
+    --mocha: #4a2000;
+    --caramel: #c47c2a;
+    --golden: #e8a940;
+    --cream: #f5ead8;
+    --milk: #fdf6ec;
+    --foam: #fff8f0;
+    --sage: #7a8c6e;
+    --terracotta: #c4613a;
+    --cardamom: #8b7355;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--espresso);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated coffee background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 80%, rgba(196,124,42,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 70% at 80% 20%, rgba(196,97,58,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, rgba(45,18,0,0.6) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Steam animation */
+  .steam-container {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 200px;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .steam {
+    position: absolute;
+    bottom: 0;
+    width: 3px;
+    border-radius: 50%;
+    background: linear-gradient(to top, rgba(232,169,64,0.15), transparent);
+    animation: steamRise 4s ease-in infinite;
+    transform-origin: bottom center;
+  }
+
+  .steam:nth-child(1) { left: 15%; animation-delay: 0s; height: 80px; }
+  .steam:nth-child(2) { left: 35%; animation-delay: 1.2s; height: 100px; width: 2px; }
+  .steam:nth-child(3) { left: 55%; animation-delay: 0.6s; height: 70px; }
+  .steam:nth-child(4) { left: 75%; animation-delay: 1.8s; height: 90px; width: 2px; }
+  .steam:nth-child(5) { left: 90%; animation-delay: 0.3s; height: 60px; }
+
+  @keyframes steamRise {
+    0% { transform: translateY(0) scaleX(1); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translateY(-120px) scaleX(2.5) rotate(10deg); opacity: 0; }
+  }
+
+  /* Floating coffee beans */
+  .beans-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .bean {
+    position: absolute;
+    width: 18px;
+    height: 28px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: radial-gradient(ellipse at 40% 40%, #4a2a10, #1a0800);
+    box-shadow: inset -3px -2px 6px rgba(0,0,0,0.5), inset 2px 1px 4px rgba(200,140,60,0.1);
+    opacity: 0.06;
+    animation: floatBean linear infinite;
+  }
+
+  .bean::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 2px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 1px;
+  }
+
+  @keyframes floatBean {
+    from { transform: translateY(110vh) rotate(0deg); }
+    to { transform: translateY(-10vh) rotate(360deg); }
+  }
+
+  /* Main container */
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Header */
+  .hero {
+    text-align: center;
+    padding: 60px 20px 50px;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--golden);
+    background: rgba(232,169,64,0.1);
+    border: 1px solid rgba(232,169,64,0.25);
+    padding: 6px 18px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 8vw, 68px);
+    font-weight: 900;
+    line-height: 1.0;
+    color: var(--foam);
+    margin-bottom: 6px;
+  }
+
+  .hero h1 span {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--golden);
+    font-size: 0.65em;
+  }
+
+  .hero-sub {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(245,234,216,0.6);
+    letter-spacing: 0.08em;
+    margin-top: 18px;
+  }
+
+  .cup-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin: 30px 0;
+  }
+
+  .cup-divider::before,
+  .cup-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(232,169,64,0.3));
+  }
+
+  .cup-divider::after {
+    background: linear-gradient(to left, transparent, rgba(232,169,64,0.3));
+  }
+
+  .cup-icon {
+    font-size: 22px;
+    filter: drop-shadow(0 0 12px rgba(232,169,64,0.4));
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(to bottom, rgba(26,10,0,0.95), rgba(26,10,0,0));
+    padding: 14px 0 20px;
+    margin-bottom: 10px;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .progress-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--caramel);
+  }
+
+  .progress-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--golden);
+  }
+
+  .progress-track {
+    height: 3px;
+    background: rgba(245,234,216,0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--caramel), var(--golden));
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 12px rgba(232,169,64,0.5);
+    width: 0%;
+  }
+
+  /* Section */
+  .section-card {
+    background: rgba(255,248,240,0.03);
+    border: 1px solid rgba(196,124,42,0.15);
+    border-radius: 4px;
+    padding: 36px 32px;
+    margin-bottom: 24px;
+    backdrop-filter: blur(4px);
+    transition: border-color 0.3s;
+  }
+
+  .section-card:hover {
+    border-color: rgba(196,124,42,0.3);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(196,124,42,0.15);
+  }
+
+  .section-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--mocha), var(--dark-roast));
+    border: 1px solid rgba(232,169,64,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--golden);
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--foam);
+  }
+
+  .section-subtitle {
+    font-size: 12px;
+    color: var(--caramel);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* Sub-section label */
+  .subsection-label {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--golden);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin: 28px 0 14px;
+    padding-left: 12px;
+    border-left: 2px solid var(--caramel);
+  }
+
+  /* Field */
+  .field {
+    margin-bottom: 22px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(245,234,216,0.8);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .field label .req {
+    color: var(--golden);
+    margin-left: 3px;
+  }
+
+  .field input[type="text"],
+  .field input[type="email"],
+  .field input[type="number"],
+  .field input[type="tel"],
+  .field select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,124,42,0.2);
+    border-radius: 3px;
+    padding: 12px 16px;
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+  }
+
+  .field input:focus,
+  .field select:focus {
+    border-color: var(--caramel);
+    background: rgba(196,124,42,0.06);
+    box-shadow: 0 0 0 3px rgba(196,124,42,0.08);
+  }
+
+  .field select option {
+    background: var(--dark-roast);
+    color: var(--cream);
+  }
+
+  /* Two-col grid */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 540px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Radio / Checkbox pills */
+  .options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .option-pill input {
+    display: none;
+  }
+
+  .option-pill label {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid rgba(196,124,42,0.25);
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 13px;
+    color: rgba(245,234,216,0.65);
+    transition: all 0.25s;
+    user-select: none;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .option-pill input:checked + label {
+    background: linear-gradient(135deg, var(--mocha), rgba(196,124,42,0.3));
+    border-color: var(--golden);
+    color: var(--golden);
+    box-shadow: 0 0 14px rgba(232,169,64,0.18);
+  }
+
+  .option-pill label:hover {
+    border-color: rgba(232,169,64,0.5);
+    color: var(--cream);
+  }
+
+  /* Likert scale */
+  .likert-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+  }
+
+  .likert-header th {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--caramel);
+    padding: 8px 4px;
+    text-align: center;
+    width: 13%;
+  }
+
+  .likert-header th:first-child {
+    text-align: left;
+    width: 48%;
+  }
+
+  .likert-row {
+    border-top: 1px solid rgba(196,124,42,0.08);
+    transition: background 0.2s;
+  }
+
+  .likert-row:hover {
+    background: rgba(196,124,42,0.04);
+  }
+
+  .likert-row td {
+    padding: 13px 4px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .likert-row td:first-child {
+    text-align: left;
+    font-size: 13px;
+    color: rgba(245,234,216,0.75);
+    padding-left: 0;
+    padding-right: 12px;
+    line-height: 1.5;
+  }
+
+  /* Custom radio for likert */
+  .likert-radio {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid rgba(196,124,42,0.3);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+  }
+
+  .likert-radio:checked {
+    border-color: var(--golden);
+    background: var(--caramel);
+    box-shadow: 0 0 12px rgba(232,169,64,0.4);
+  }
+
+  .likert-radio:hover {
+    border-color: rgba(232,169,64,0.6);
+    transform: scale(1.15);
+  }
+
+  /* Mobile: likert stacked */
+  @media (max-width: 580px) {
+    .likert-header { display: none; }
+    .likert-row { display: block; padding: 16px 0; }
+    .likert-row td { display: inline-block; padding: 4px 8px; }
+    .likert-row td:first-child { display: block; margin-bottom: 10px; }
+    .likert-mobile-label { font-size: 9px; color: var(--caramel); display: block; text-align: center; margin-top: 3px; }
+  }
+
+  @media (min-width: 581px) { .likert-mobile-label { display: none; } }
+
+  /* (config section removed) */
+
+  /* Submit button */
+  .submit-area {
+    text-align: center;
+    padding: 20px 0 40px;
+  }
+
+  .submit-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, var(--mocha) 0%, var(--caramel) 100%);
+    color: var(--foam);
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 18px 48px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 8px 32px rgba(196,124,42,0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+    overflow: hidden;
+  }
+
+  .submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.08) 100%);
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 40px rgba(196,124,42,0.4);
+  }
+
+  .submit-btn:active {
+    transform: translateY(0);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .submit-note {
+    font-size: 12px;
+    color: rgba(245,234,216,0.35);
+    margin-top: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Toast notifications */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 24px;
+    padding: 16px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 9999;
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 320px;
+    line-height: 1.4;
+  }
+
+  .toast.show { transform: translateX(0); }
+
+  .toast-success {
+    background: linear-gradient(135deg, #1e3a1e, #2a5a2a);
+    border: 1px solid rgba(100,200,100,0.3);
+    color: #b0f0b0;
+  }
+
+  .toast-error {
+    background: linear-gradient(135deg, #3a1e1e, #5a2a2a);
+    border: 1px solid rgba(200,100,100,0.3);
+    color: #f0b0b0;
+  }
+
+  /* Success screen */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 80px 40px;
+    animation: fadeInUp 0.7s ease;
+  }
+
+  .success-screen.show { display: block; }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .success-cup {
+    font-size: 72px;
+    margin-bottom: 24px;
+    display: block;
+    animation: cupBounce 1s ease;
+  }
+
+  @keyframes cupBounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15) rotate(-5deg); }
+  }
+
+  .success-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    color: var(--golden);
+    margin-bottom: 12px;
+  }
+
+  .success-screen p {
+    color: rgba(245,234,216,0.6);
+    font-size: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* Loader */
+  .loader {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(245,234,216,0.3);
+    border-top-color: var(--cream);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Scroll reveal */
+  .section-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s;
+  }
+
+  .section-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 600px) {
+    .section-card { padding: 24px 18px; }
+    .config-section { padding: 20px 18px; }
+  }
+
+  /* Highlight on answered */
+  .likert-row.answered td:first-child {
+    color: var(--cream);
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating beans background -->
+<div class="beans-bg" id="beansContainer"></div>
+
+<!-- Steam -->
+<div class="steam-container">
+  <div class="steam"></div>
+  <div class="steam"></div>
+  <div class="steam"></div>
+  <div class="steam"></div>
+  <div class="steam"></div>
+</div>
+
+<div class="wrapper">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-badge">☕ Brand Relationship Management · India Coffee Study</div>
+    <h1>Coffee &amp; You<span>A Survey on Indian Coffee Culture</span></h1>
+    <p class="hero-sub">Share your brew story — your responses help us understand India's evolving coffee landscape.</p>
+    <div class="cup-divider"><span class="cup-icon">☕</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span class="progress-label">Your journey</span>
+      <span class="progress-pct" id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Script URL is configured in the JS below -->
+
+  <!-- ======== FORM ======== -->
+  <form id="surveyForm" novalidate>
+
+    <!-- SECTION A -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">A</div>
+        <div>
+          <div class="section-title">Demographic Profile</div>
+          <div class="section-subtitle">Market Segmentation</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Name <span class="req">*</span></label>
+          <input type="text" name="name" required placeholder="Your full name"/>
+        </div>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" name="email" required placeholder="you@example.com"/>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Contact Number</label>
+          <input type="tel" name="contact" placeholder="+91 XXXXX XXXXX"/>
+        </div>
+        <div class="field">
+          <label>Age Group <span class="req">*</span></label>
+          <select name="age" required>
+            <option value="">Select age range</option>
+            <option>Under 25</option>
+            <option>25 – 34</option>
+            <option>35 – 44</option>
+            <option>45 – 54</option>
+            <option>55 – 64</option>
+            <option>65 and above</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Gender <span class="req">*</span></label>
+        <div class="options-grid">
+          <div class="option-pill"><input type="radio" name="gender" id="gM" value="Male" required/><label for="gM">Male</label></div>
+          <div class="option-pill"><input type="radio" name="gender" id="gF" value="Female"/><label for="gF">Female</label></div>
+          <div class="option-pill"><input type="radio" name="gender" id="gO" value="Other"/><label for="gO">Other</label></div>
+          <div class="option-pill"><input type="radio" name="gender" id="gP" value="Prefer not to say"/><label for="gP">Prefer not to say</label></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Education Level <span class="req">*</span></label>
+        <select name="education" required>
+          <option value="">Select level</option>
+          <option>Below Secondary</option>
+          <option>Secondary (10th)</option>
+          <option>Higher Secondary (12th)</option>
+          <option>Undergraduate</option>
+          <option>Postgraduate</option>
+          <option>Doctorate</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Occupation <span class="req">*</span></label>
+        <div class="options-grid">
+          <div class="option-pill"><input type="radio" name="occupation" id="ocS" value="Student" required/><label for="ocS">Student</label></div>
+          <div class="option-pill"><input type="radio" name="occupation" id="ocSE" value="Self-employed"/><label for="ocSE">Self-employed</label></div>
+          <div class="option-pill"><input type="radio" name="occupation" id="ocWP" value="Working Professional"/><label for="ocWP">Working Professional</label></div>
+          <div class="option-pill"><input type="radio" name="occupation" id="ocO" value="Other"/><label for="ocO">Other</label></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Monthly Personal Income <span class="req">*</span></label>
+        <div class="options-grid">
+          <div class="option-pill"><input type="radio" name="income" id="inc0" value="No income" required/><label for="inc0">No income</label></div>
+          <div class="option-pill"><input type="radio" name="income" id="inc1" value="Below ₹15,000"/><label for="inc1">Below ₹15,000</label></div>
+          <div class="option-pill"><input type="radio" name="income" id="inc2" value="₹15,001–₹30,000"/><label for="inc2">₹15,001–30,000</label></div>
+          <div class="option-pill"><input type="radio" name="income" id="inc3" value="₹30,001–₹50,000"/><label for="inc3">₹30,001–50,000</label></div>
+          <div class="option-pill"><input type="radio" name="income" id="inc4" value="Above ₹50,000"/><label for="inc4">Above ₹50,000</label></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Do you consume coffee? <span class="req">*</span></label>
+        <div class="options-grid">
+          <div class="option-pill"><input type="radio" name="consumesCoffee" id="ccY" value="Yes" required/><label for="ccY">Yes ☕</label></div>
+          <div class="option-pill"><input type="radio" name="consumesCoffee" id="ccN" value="No"/><label for="ccN">No 🚫</label></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>How often do you drink coffee? <span class="req">*</span></label>
+        <div class="options-grid">
+          <div class="option-pill"><input type="radio" name="frequency" id="fr1" value="Several times a day" required/><label for="fr1">Several times a day</label></div>
+          <div class="option-pill"><input type="radio" name="frequency" id="fr2" value="Once a day"/><label for="fr2">Once a day</label></div>
+          <div class="option-pill"><input type="radio" name="frequency" id="fr3" value="Several times a week"/><label for="fr3">Several times a week</label></div>
+          <div class="option-pill"><input type="radio" name="frequency" id="fr4" value="Once a week"/><label for="fr4">Once a week</label></div>
+          <div class="option-pill"><input type="radio" name="frequency" id="fr5" value="Less than once a week"/><label for="fr5">Less than once a week</label></div>
+        </div>
+      </div>
+    </div><!-- /section A -->
+
+    <!-- SECTION B -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">B</div>
+        <div>
+          <div class="section-title">Coffee Consumption Frequency</div>
+          <div class="section-subtitle">Likert Scale · Strongly Agree → Strongly Disagree</div>
+        </div>
+      </div>
+
+      <div class="subsection-label">Health Perception</div>
+      <table class="likert-table">
+        <thead class="likert-header">
+          <tr>
+            <th>Statement</th>
+            <th>Strongly Agree</th>
+            <th>Agree</th>
+            <th>Neutral</th>
+            <th>Disagree</th>
+            <th>Strongly Disagree</th>
+          </tr>
+        </thead>
+        <tbody id="likertB">
+        </tbody>
+      </table>
+
+      <div class="subsection-label">Habit</div>
+      <table class="likert-table">
+        <thead class="likert-header">
+          <tr>
+            <th>Statement</th>
+            <th>Strongly Agree</th>
+            <th>Agree</th>
+            <th>Neutral</th>
+            <th>Disagree</th>
+            <th>Strongly Disagree</th>
+          </tr>
+        </thead>
+        <tbody id="likertBHabit"></tbody>
+      </table>
+
+      <div class="subsection-label">Lifestyle</div>
+      <table class="likert-table">
+        <thead class="likert-header">
+          <tr>
+            <th>Statement</th>
+            <th>Strongly Agree</th>
+            <th>Agree</th>
+            <th>Neutral</th>
+            <th>Disagree</th>
+            <th>Strongly Disagree</th>
+          </tr>
+        </thead>
+        <tbody id="likertBLifestyle"></tbody>
+      </table>
+
+      <div class="subsection-label">Product Availability</div>
+      <table class="likert-table">
+        <thead class="likert-header">
+          <tr>
+            <th>Statement</th>
+            <th>Strongly Agree</th>
+            <th>Agree</th>
+            <th>Neutral</th>
+            <th>Disagree</th>
+            <th>Strongly Disagree</th>
+          </tr>
+        </thead>
+        <tbody id="likertBAvail"></tbody>
+      </table>
+    </div><!-- /section B -->
+
+    <!-- SECTION C -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-num">C</div>
+        <div>
+          <div class="section-title">Customer Preference</div>
+          <div class="section-subtitle">Likert Scale · Strongly Agree → Strongly Disagree</div>
+        </div>
+      </div>
+
+      <div class="subsection-label">Flavour</div>
+      <table class="likert-table">
+        <thead class="likert-header">
+          <tr>
+            <th>Statement</th>
+            <th>Strongly Agree</th>
+            <th>Agree</th>
+            <th>Neutral</th>
+            <th>Disagree</th>
+            <th>Strongly Disagree</th>
+          </tr>
+        </thead>
+        <tbody id="likertCFlavour"></tbody>
+      </table>
+
+      <div class="subsection-label">Packaging</div>
+      <table class="likert-table">
+        <thead class="likert-header">
+          <tr>
+            <th>Statement</th>
+            <th>Strongly Agree</th>
+            <th>Agree</th>
+            <th>Neutral</th>
+            <th>Disagree</th>
+            <th>Strongly Disagree</th>
+          </tr>
+        </thead>
+        <tbody id="likertCPack"></tbody>
+      </table>
+
+      <div class="subsection-label">Price</div>
+      <table class="likert-table">
+        <thead class="likert-header">
+          <tr>
+            <th>Statement</th>
+            <th>Strongly Agree</th>
+            <th>Agree</th>
+            <th>Neutral</th>
+            <th>Disagree</th>
+            <th>Strongly Disagree</th>
+          </tr>
+        </thead>
+        <tbody id="likertCPrice"></tbody>
+      </table>
+
+      <div class="subsection-label">Brand Preference</div>
+      <table class="likert-table">
+        <thead class="likert-header">
+          <tr>
+            <th>Statement</th>
+            <th>Strongly Agree</th>
+            <th>Agree</th>
+            <th>Neutral</th>
+            <th>Disagree</th>
+            <th>Strongly Disagree</th>
+          </tr>
+        </thead>
+        <tbody id="likertCBrand"></tbody>
+      </table>
+    </div><!-- /section C -->
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span id="btnText">Submit My Responses</span>
+        <span id="btnLoader" style="display:none;"><span class="loader"></span></span>
+        <span>☕</span>
+      </button>
+      <p class="submit-note">Your responses will be saved to Google Sheets &amp; emailed back to you.</p>
+    </div>
+
+  </form><!-- /form -->
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <span class="success-cup">☕</span>
+    <h2>Thank You!</h2>
+    <p>Your responses have been brewed and saved. A confirmation with your answers has been sent to your email. We appreciate you being part of India's coffee story.</p>
+  </div>
+
+  <!-- Setup guide removed — configuration is handled in the JS code -->
+
+</div><!-- /wrapper -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║              🔧 YOUR CONFIGURATION — FILL THESE IN          ║
+// ╠══════════════════════════════════════════════════════════════╣
+// ║  GOOGLE SHEETS (Apps Script Web App URL)                    ║
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQjXSB-qx1jgVSkayMPepODiUpENKEXbPQVKjX-GnpODNjGtjeMcL2D3J-RNi0R9LH/exec';
+// ║                                                              ║
+// ║  EMAILJS CREDENTIALS                                        ║
+// ║  Get these from https://www.emailjs.com/account/            ║
+const EMAILJS_PUBLIC_KEY  = 'NZq-BTm8hRRGzkoPq';   // Account > API Keys
+const EMAILJS_SERVICE_ID  = 'Utkarsh_24nmd09';   // Email Services tab
+const EMAILJS_TEMPLATE_ID = 'template_tckymxl';  // Email Templates tab
+// ╚══════════════════════════════════════════════════════════════╝
+
+// Initialise EmailJS with your public key
+emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+// ============================================================
+// LIKERT DATA
+// ============================================================
+const likertQuestions = {
+  likertB: [
+    { name: "b_energy", text: "Drinking coffee helps me feel more energetic." },
+    { name: "b_alert",  text: "Coffee helps me stay alert and focused." },
+    { name: "b_health", text: "I believe coffee has health benefits." },
+  ],
+  likertBHabit: [
+    { name: "b_routine",   text: "Drinking coffee is part of my daily routine." },
+    { name: "b_auto",      text: "I drink coffee automatically without thinking about it." },
+    { name: "b_missing",   text: "I feel something is missing if I do not drink coffee." },
+  ],
+  likertBLifestyle: [
+    { name: "b_lifestyle",  text: "Coffee consumption fits well with my lifestyle." },
+    { name: "b_social",     text: "I drink coffee when socialising with friends." },
+    { name: "b_daily1",     text: "Coffee is part of my daily activities." },
+    { name: "b_leisure",    text: "Visiting coffee shops is a part of my leisure activities." },
+    { name: "b_reflects",   text: "Coffee consumption reflects my personal lifestyle preferences." },
+  ],
+  likertBAvail: [
+    { name: "b_avail_easy", text: "Coffee products are easily available in nearby stores or cafés." },
+    { name: "b_avail_pref", text: "I prefer to buy coffee brands that are easily available in my area." },
+    { name: "b_avail_switch", text: "If my preferred coffee brand is not available, I switch to another brand." },
+  ],
+  likertCFlavour: [
+    { name: "c_taste_imp",  text: "The taste of coffee is important when I choose which coffee to buy." },
+    { name: "c_aroma",      text: "I prefer coffee with a rich aroma and flavour." },
+    { name: "c_enjoy",      text: "I choose coffee mainly because I enjoy its taste." },
+  ],
+  likertCPack: [
+    { name: "c_pack_inf",  text: "Attractive packaging influences my choice of coffee." },
+    { name: "c_pack_qual", text: "Packaging helps me identify good-quality coffee products." },
+    { name: "c_pack_pref", text: "I prefer coffee brands with appealing packaging." },
+  ],
+  likertCPrice: [
+    { name: "c_price_inf",  text: "Price influences my decision when buying coffee." },
+    { name: "c_price_comp", text: "I compare prices before choosing coffee products." },
+    { name: "c_price_val",  text: "I prefer coffee that offers good value for money." },
+  ],
+  likertCBrand: [
+    { name: "c_brand_imp",   text: "When buying coffee, how important is the brand name to you." },
+    { name: "c_brand_cons",  text: "When I buy coffee, I consider the brand before making my purchase decision." },
+    { name: "c_brand_repurch", text: "I usually repurchase the same coffee brand if I am satisfied with it." },
+  ],
+};
+
+const likertLabels = ["Strongly Agree","Agree","Neutral","Disagree","Strongly Disagree"];
+
+function buildLikert(tbodyId, questions) {
+  const tbody = document.getElementById(tbodyId);
+  questions.forEach((q, qi) => {
+    const tr = document.createElement('tr');
+    tr.className = 'likert-row';
+    tr.dataset.name = q.name;
+    let html = `<td>${q.text}</td>`;
+    likertLabels.forEach((lbl, li) => {
+      const id = `${q.name}_${li}`;
+      html += `<td>
+        <input class="likert-radio" type="radio" name="${q.name}" id="${id}" value="${lbl}" required/>
+        <span class="likert-mobile-label">${lbl}</span>
+      </td>`;
+    });
+    tr.innerHTML = html;
+    tbody.appendChild(tr);
+
+    // highlight row on selection
+    tr.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('change', () => {
+        tr.classList.add('answered');
+        updateProgress();
+      });
+    });
+  });
+}
+
+// Build all likert tables
+Object.entries(likertQuestions).forEach(([id, qs]) => buildLikert(id, qs));
+
+// ============================================================
+// PROGRESS
+// ============================================================
+function updateProgress() {
+  const form = document.getElementById('surveyForm');
+  const required = form.querySelectorAll('[required]');
+  const filled = [...required].filter(el => {
+    if (el.type === 'radio') {
+      return form.querySelector(`[name="${el.name}"]:checked`);
+    }
+    return el.value.trim() !== '';
+  });
+  const dedupNames = new Set([...required].map(e => e.name));
+  const dedupFilled = new Set([...filled].map(e => e.name));
+  const pct = Math.round((dedupFilled.size / dedupNames.size) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+document.getElementById('surveyForm').addEventListener('input', updateProgress);
+
+// ============================================================
+// FLOATING BEANS
+// ============================================================
+const beanContainer = document.getElementById('beansContainer');
+for (let i = 0; i < 20; i++) {
+  const bean = document.createElement('div');
+  bean.className = 'bean';
+  bean.style.left = Math.random() * 100 + '%';
+  bean.style.animationDuration = (18 + Math.random() * 22) + 's';
+  bean.style.animationDelay = -(Math.random() * 30) + 's';
+  bean.style.transform = `rotate(${Math.random()*360}deg)`;
+  bean.style.opacity = (0.03 + Math.random() * 0.06).toString();
+  beanContainer.appendChild(bean);
+}
+
+// ============================================================
+// SCROLL REVEAL
+// ============================================================
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.section-card').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.06) + 's';
+  observer.observe(el);
+});
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast toast-${type} show`;
+  setTimeout(() => t.classList.remove('show'), 4500);
+}
+
+// ============================================================
+// GOOGLE APPS SCRIPT — paste this into Extensions > Apps Script
+// in your Google Sheet, then deploy as Web App and paste the
+// URL into GOOGLE_SCRIPT_URL above.
+//
+// function doPost(e) {
+//   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+//   var data = JSON.parse(e.postData.contents);
+//   if (sheet.getLastRow() === 0) { sheet.appendRow(Object.keys(data)); }
+//   sheet.appendRow(Object.values(data));
+//   if (data.email) {
+//     MailApp.sendEmail({ to: data.email,
+//       subject: "☕ Your BRM Coffee Survey Response — Thank You!",
+//       htmlBody: buildEmailBody(data) });
+//   }
+//   return ContentService.createTextOutput(JSON.stringify({status:"success"}))
+//     .setMimeType(ContentService.MimeType.JSON);
+// }
+// function buildEmailBody(data) {
+//   var rows = Object.entries(data).map(function([k,v]) {
+//     return '<tr><td style="padding:6px 12px;color:#8b7355;font-size:13px;">'
+//       + k.replace(/_/g,' ') + '</td><td style="padding:6px 12px;color:#f5ead8;font-size:13px;">' + v + '</td></tr>';
+//   }).join('');
+//   return '<div style="background:#1a0a00;font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:32px;">'
+//     + '<h2 style="color:#e8a940;">☕ Coffee &amp; You — Your Survey Response</h2>'
+//     + '<table style="width:100%;border-collapse:collapse;">' + rows + '</table>'
+//     + '<p style="color:rgba(245,234,216,0.4);font-size:11px;margin-top:24px;text-align:center;">BRM Study · India Coffee Research</p></div>';
+// }
+// ============================================================
+
+// ============================================================
+// FORM SUBMIT
+// ============================================================
+document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const btn = document.getElementById('submitBtn');
+  const btnText = document.getElementById('btnText');
+  const btnLoader = document.getElementById('btnLoader');
+
+  // Collect data
+  const data = {};
+  data.timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+  // Text / select / number fields
+  ['name','email','contact','age','education'].forEach(n => {
+    const el = form.querySelector(`[name="${n}"]`);
+    if (el) data[n] = el.value.trim();
+  });
+
+  // Radio groups (section A)
+  ['gender','occupation','income','consumesCoffee','frequency'].forEach(n => {
+    const checked = form.querySelector(`[name="${n}"]:checked`);
+    data[n] = checked ? checked.value : '';
+  });
+
+  // Likert questions
+  const allLikert = Object.values(likertQuestions).flat();
+  allLikert.forEach(q => {
+    const checked = form.querySelector(`[name="${q.name}"]:checked`);
+    data[q.name] = checked ? checked.value : '';
+  });
+
+  // Basic validation
+  if (!data.name || !data.email) {
+    showToast('Please fill in your Name and Email.', 'error');
+    return;
+  }
+
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRe.test(data.email)) {
+    showToast('Please enter a valid email address.', 'error');
+    return;
+  }
+
+  // Check required radios
+  const requiredRadios = ['gender','occupation','income','consumesCoffee','frequency'];
+  for (const n of requiredRadios) {
+    if (!data[n]) {
+      showToast(`Please answer all required questions (${n.replace(/([A-Z])/g,' $1')}).`, 'error');
+      return;
+    }
+  }
+
+  const scriptUrl = document.getElementById('scriptUrl')?.value.trim() || '';
+
+  btn.disabled = true;
+  btnText.style.display = 'none';
+  btnLoader.style.display = 'inline';
+
+  try {
+    // ── 1. SAVE TO GOOGLE SHEETS ─────────────────────────────
+    if (!GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID_HERE')) {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    }
+
+    // ── 2. SEND EMAIL VIA EMAILJS ─────────────────────────────
+    // Build a readable summary of all responses for the email template.
+    // In your EmailJS template use these variables:
+    //   {{to_name}}       — respondent's name
+    //   {{to_email}}      — respondent's email
+    //   {{timestamp}}     — submission time
+    //   {{summary}}       — full formatted response summary (plain text)
+    if (!EMAILJS_PUBLIC_KEY.includes('YOUR_EMAILJS')) {
+      const summaryLines = Object.entries(data).map(([k, v]) =>
+        `${k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}: ${v || '—'}`
+      );
+
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_name:   data.name,
+        to_email:  data.email,
+        timestamp: data.timestamp,
+        summary:   summaryLines.join('\n'),
+        // Individual fields also available in template:
+        respondent_name:      data.name,
+        respondent_email:     data.email,
+        respondent_age:       data.age,
+        respondent_gender:    data.gender,
+        respondent_education: data.education,
+        respondent_occupation:data.occupation,
+        respondent_income:    data.income,
+        consumes_coffee:      data.consumesCoffee,
+        coffee_frequency:     data.frequency,
+      });
+    }
+
+    showToast('✅ Responses saved! Check your inbox for your copy.', 'success');
+
+    // Show success screen
+    setTimeout(() => {
+      document.getElementById('surveyForm').style.display = 'none';
+      document.getElementById('successScreen').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1500);
+
+  } catch (err) {
+    console.error('Submission error:', err);
+    showToast('⚠️ Something went wrong. Please try again.', 'error');
+    btn.disabled = false;
+    btnText.style.display = 'inline';
+    btnLoader.style.display = 'none';
+  }
+});
+</script>
+</body>
+</html>
