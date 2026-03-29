@@ -974,15 +974,13 @@
 // ║  GOOGLE SHEETS (Apps Script Web App URL)                    ║
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQjXSB-qx1jgVSkayMPepODiUpENKEXbPQVKjX-GnpODNjGtjeMcL2D3J-RNi0R9LH/exec';
 // ║                                                              ║
-// ║  EMAILJS CREDENTIALS                                        ║
-// ║  Get these from https://www.emailjs.com/account/            ║
-const EMAILJS_PUBLIC_KEY  = 'NZq-BTm8hRRGzkoPq';   // Account > API Keys
-const EMAILJS_SERVICE_ID  = 'Utkarsh_24nmd09';   // Email Services tab
-const EMAILJS_TEMPLATE_ID = 'template_tckymxl';  // Email Templates tab
+// ║  EMAILJS CREDENTIALS (disabled)                             ║
+// const EMAILJS_PUBLIC_KEY  = 'NZq-BTm8hRRGzkoPq';
+// const EMAILJS_SERVICE_ID  = 'Utkarsh_24nmd09';
+// const EMAILJS_TEMPLATE_ID = 'template_tckymxl';
 // ╚══════════════════════════════════════════════════════════════╝
 
-// Initialise EmailJS with your public key
-emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+// EmailJS init removed — email sending is disabled
 
 // ============================================================
 // LIKERT DATA
@@ -1051,7 +1049,6 @@ function buildLikert(tbodyId, questions) {
     tr.innerHTML = html;
     tbody.appendChild(tr);
 
-    // highlight row on selection
     tr.querySelectorAll('input').forEach(inp => {
       inp.addEventListener('change', () => {
         tr.classList.add('answered');
@@ -1061,7 +1058,6 @@ function buildLikert(tbodyId, questions) {
   });
 }
 
-// Build all likert tables
 Object.entries(likertQuestions).forEach(([id, qs]) => buildLikert(id, qs));
 
 // ============================================================
@@ -1123,36 +1119,6 @@ function showToast(msg, type = 'success') {
 }
 
 // ============================================================
-// GOOGLE APPS SCRIPT — paste this into Extensions > Apps Script
-// in your Google Sheet, then deploy as Web App and paste the
-// URL into GOOGLE_SCRIPT_URL above.
-//
-// function doPost(e) {
-//   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-//   var data = JSON.parse(e.postData.contents);
-//   if (sheet.getLastRow() === 0) { sheet.appendRow(Object.keys(data)); }
-//   sheet.appendRow(Object.values(data));
-//   if (data.email) {
-//     MailApp.sendEmail({ to: data.email,
-//       subject: "☕ Your BRM Coffee Survey Response — Thank You!",
-//       htmlBody: buildEmailBody(data) });
-//   }
-//   return ContentService.createTextOutput(JSON.stringify({status:"success"}))
-//     .setMimeType(ContentService.MimeType.JSON);
-// }
-// function buildEmailBody(data) {
-//   var rows = Object.entries(data).map(function([k,v]) {
-//     return '<tr><td style="padding:6px 12px;color:#8b7355;font-size:13px;">'
-//       + k.replace(/_/g,' ') + '</td><td style="padding:6px 12px;color:#f5ead8;font-size:13px;">' + v + '</td></tr>';
-//   }).join('');
-//   return '<div style="background:#1a0a00;font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:32px;">'
-//     + '<h2 style="color:#e8a940;">☕ Coffee &amp; You — Your Survey Response</h2>'
-//     + '<table style="width:100%;border-collapse:collapse;">' + rows + '</table>'
-//     + '<p style="color:rgba(245,234,216,0.4);font-size:11px;margin-top:24px;text-align:center;">BRM Study · India Coffee Research</p></div>';
-// }
-// ============================================================
-
-// ============================================================
 // FORM SUBMIT
 // ============================================================
 document.getElementById('surveyForm').addEventListener('submit', async function(e) {
@@ -1163,30 +1129,25 @@ document.getElementById('surveyForm').addEventListener('submit', async function(
   const btnText = document.getElementById('btnText');
   const btnLoader = document.getElementById('btnLoader');
 
-  // Collect data
   const data = {};
   data.timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
 
-  // Text / select / number fields
   ['name','email','contact','age','education'].forEach(n => {
     const el = form.querySelector(`[name="${n}"]`);
     if (el) data[n] = el.value.trim();
   });
 
-  // Radio groups (section A)
   ['gender','occupation','income','consumesCoffee','frequency'].forEach(n => {
     const checked = form.querySelector(`[name="${n}"]:checked`);
     data[n] = checked ? checked.value : '';
   });
 
-  // Likert questions
   const allLikert = Object.values(likertQuestions).flat();
   allLikert.forEach(q => {
     const checked = form.querySelector(`[name="${q.name}"]:checked`);
     data[q.name] = checked ? checked.value : '';
   });
 
-  // Basic validation
   if (!data.name || !data.email) {
     showToast('Please fill in your Name and Email.', 'error');
     return;
@@ -1198,7 +1159,6 @@ document.getElementById('surveyForm').addEventListener('submit', async function(
     return;
   }
 
-  // Check required radios
   const requiredRadios = ['gender','occupation','income','consumesCoffee','frequency'];
   for (const n of requiredRadios) {
     if (!data[n]) {
@@ -1207,56 +1167,24 @@ document.getElementById('surveyForm').addEventListener('submit', async function(
     }
   }
 
-  const scriptUrl = document.getElementById('scriptUrl')?.value.trim() || '';
-
   btn.disabled = true;
   btnText.style.display = 'none';
   btnLoader.style.display = 'inline';
 
   try {
-    // ── 1. SAVE TO GOOGLE SHEETS ─────────────────────────────
-    if (!GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID_HERE')) {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-    }
+    // ── SAVE TO GOOGLE SHEETS ─────────────────────────────
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
 
-    // ── 2. SEND EMAIL VIA EMAILJS ─────────────────────────────
-    // Build a readable summary of all responses for the email template.
-    // In your EmailJS template use these variables:
-    //   {{to_name}}       — respondent's name
-    //   {{to_email}}      — respondent's email
-    //   {{timestamp}}     — submission time
-    //   {{summary}}       — full formatted response summary (plain text)
-    if (!EMAILJS_PUBLIC_KEY.includes('YOUR_EMAILJS')) {
-      const summaryLines = Object.entries(data).map(([k, v]) =>
-        `${k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}: ${v || '—'}`
-      );
+    // ── EMAIL SENDING DISABLED ────────────────────────────
+    // EmailJS removed to allow unlimited responses.
 
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_name:   data.name,
-        to_email:  data.email,
-        timestamp: data.timestamp,
-        summary:   summaryLines.join('\n'),
-        // Individual fields also available in template:
-        respondent_name:      data.name,
-        respondent_email:     data.email,
-        respondent_age:       data.age,
-        respondent_gender:    data.gender,
-        respondent_education: data.education,
-        respondent_occupation:data.occupation,
-        respondent_income:    data.income,
-        consumes_coffee:      data.consumesCoffee,
-        coffee_frequency:     data.frequency,
-      });
-    }
+    showToast('✅ Responses saved! Thank you for participating.', 'success');
 
-    showToast('✅ Responses saved! Check your inbox for your copy.', 'success');
-
-    // Show success screen
     setTimeout(() => {
       document.getElementById('surveyForm').style.display = 'none';
       document.getElementById('successScreen').classList.add('show');
